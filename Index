@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unlucky Flips</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bar-background">
+        <div class="bar-counter"></div>
+        <div class="bottle bottle1">🍺</div>
+        <div class="bottle bottle2">🍷</div>
+        <div class="bottle bottle3">🥃</div>
+        
+        <!-- Start Menu -->
+        <div id="startMenu" class="menu">
+            <h1>Unlucky Flips</h1>
+            <p>Test your luck in the tavern!</p>
+            <button id="startButton">Start Game</button>
+            <button id="instructionsButton">Instructions</button>
+            <button id="socialsButton">Socials</button>
+        </div>
+        
+        <!-- Instructions Modal -->
+        <div id="instructionsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>How to Play</h2>
+                <p>Get 10 heads in a row to win!</p>
+                <ul>
+                    <li>Click "Flip Coin" to flip</li>
+                    <li>Earn 10 money per heads</li>
+                    <li>Buy upgrades to speed up or automate</li>
+                    <li>1-second cooldown between flips</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Socials Modal -->
+        <div id="socialsModal" class="modal">
+            <div class="modal-content">
+                <span class="close-socials">&times;</span>
+                <h2>Follow Me!</h2>
+                <p>Check out my content and code:</p>
+                <div class="social-links">
+                    <a href="https://www.youtube.com/@JackIsTiredd" target="_blank" class="social-link">
+                        <span class="social-icon">📺</span> YouTube Channel
+                    </a>
+                    <a href="https://github.com/JackVibeCodes" target="_blank" class="social-link">
+                        <span class="social-icon">💻</span> GitHub Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game Container -->
+        <div id="gameContainer" class="game-container" style="display: none;">
+            <h1>Unlucky Flips</h1>
+            <p>Get 10 heads in a row to win!</p>
+            <div id="coin" class="coin">Flip to start</div>
+            <button id="flipButton">Flip Coin</button>
+            <div id="result"></div>
+            <div id="streak">Heads Streak: 0</div>
+            <div id="coins">Current Money: 0</div>
+            <div id="totalMoney">Total Money Earned: 0</div>
+            <div class="upgrades">
+                <button id="fasterButton">Buy Faster Flip (100 money)</button>
+                <button id="autoButton">Buy Auto Flip (500 money)</button>
+            </div>
+            <div id="message"></div>
+        </div>
+        
+        <div class="stool stool1"></div>
+        <div class="stool stool2"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
