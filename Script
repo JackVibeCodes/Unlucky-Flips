@@ -1,0 +1,156 @@
+// Menu elements
+const startMenu = document.getElementById('startMenu');
+const gameContainer = document.getElementById('gameContainer');
+const instructionsModal = document.getElementById('instructionsModal');
+const socialsModal = document.getElementById('socialsModal');
+const startButton = document.getElementById('startButton');
+const instructionsButton = document.getElementById('instructionsButton');
+const socialsButton = document.getElementById('socialsButton');
+const closeModal = document.querySelector('.close');
+const closeSocialsModal = document.querySelector('.close-socials');
+
+// Menu event listeners
+startButton.addEventListener('click', startGame);
+instructionsButton.addEventListener('click', showInstructions);
+socialsButton.addEventListener('click', showSocials);
+closeModal.addEventListener('click', hideInstructions);
+closeSocialsModal.addEventListener('click', hideSocials);
+
+// Menu functions
+function startGame() {
+    startMenu.style.display = 'none';
+    gameContainer.style.display = 'block';
+}
+
+function showInstructions() {
+    instructionsModal.style.display = 'block';
+}
+
+function hideInstructions() {
+    instructionsModal.style.display = 'none';
+}
+
+function showSocials() {
+    socialsModal.style.display = 'block';
+}
+
+function hideSocials() {
+    socialsModal.style.display = 'none';
+}
+
+// Coin flip game logic
+const coin = document.getElementById('coin');
+const flipButton = document.getElementById('flipButton');
+const resultDiv = document.getElementById('result');
+const streakDiv = document.getElementById('streak');
+const messageDiv = document.getElementById('message');
+const coinsDiv = document.getElementById('coins');
+const totalMoneyDiv = document.getElementById('totalMoney');
+const fasterButton = document.getElementById('fasterButton');
+const autoButton = document.getElementById('autoButton');
+
+let headsStreak = 0;
+let coins = 0;
+let totalMoney = 0;
+let flipTime = 500;
+let cooldownTime = 1000;
+let fasterUpgrades = 0;
+let autoFlip = false;
+let autoFlipInterval;
+
+flipButton.addEventListener('click', () => flipCoin(false));
+fasterButton.addEventListener('click', buyFasterFlip);
+autoButton.addEventListener('click', buyAutoFlip);
+
+function flipCoin(isAuto) {
+    if (isAuto && !autoFlip) return; // Prevent auto flip if not enabled
+    if (flipButton.disabled && !isAuto) return; // Prevent manual flip during cooldown
+
+    flipButton.disabled = true;
+
+    // Add flipping animation
+    coin.classList.add('flipping');
+
+    // Simulate flip delay
+    setTimeout(() => {
+        coin.classList.remove('flipping');
+
+        // Random flip: 0 = tails, 1 = heads
+        const isHeads = Math.random() < 0.5;
+
+        if (isHeads) {
+            coin.textContent = 'H';
+            coin.classList.remove('tails');
+            coin.classList.add('heads');
+            resultDiv.textContent = 'Heads!';
+            headsStreak++;
+            coins += 10;
+            totalMoney += 10;
+            updateCoinsDisplay();
+            updateTotalMoneyDisplay();
+        } else {
+            coin.textContent = 'T';
+            coin.classList.remove('heads');
+            coin.classList.add('tails');
+            resultDiv.textContent = 'Tails!';
+            headsStreak = 0;
+        }
+
+        streakDiv.textContent = 'Heads Streak: ' + headsStreak;
+
+        if (headsStreak === 10) {
+            messageDiv.textContent = 'Congratulations! You won by getting 10 heads in a row!';
+            flipButton.disabled = true;
+            if (autoFlip) {
+                clearInterval(autoFlipInterval);
+            }
+        } else {
+            // Enable button after cooldown
+            setTimeout(() => {
+                if (headsStreak < 10) {
+                    flipButton.disabled = false;
+                }
+            }, cooldownTime - flipTime);
+        }
+    }, flipTime);
+}
+
+function updateCoinsDisplay() {
+    coinsDiv.textContent = 'Current Money: ' + coins;
+}
+
+function updateTotalMoneyDisplay() {
+    totalMoneyDiv.textContent = 'Total Money Earned: ' + totalMoney;
+}
+
+function buyFasterFlip() {
+    if (coins >= 100) {
+        coins -= 100;
+        fasterUpgrades++;
+        cooldownTime *= 0.97; // 3% faster cooldown
+        updateCoinsDisplay();
+        fasterButton.textContent = 'Buy Faster Flip (100 money) - Level ' + fasterUpgrades;
+        // Update auto flip interval if active
+        if (autoFlip) {
+            clearInterval(autoFlipInterval);
+            autoFlipInterval = setInterval(() => flipCoin(true), cooldownTime);
+        }
+    } else {
+        alert('Not enough money!');
+    }
+}
+
+function buyAutoFlip() {
+    if (coins >= 500 && !autoFlip) {
+        coins -= 500;
+        autoFlip = true;
+        updateCoinsDisplay();
+        autoButton.disabled = true;
+        autoButton.textContent = 'Auto Flip Enabled';
+        autoFlipInterval = setInterval(() => flipCoin(true), cooldownTime);
+    } else if (autoFlip) {
+        alert('Auto flip already enabled!');
+    } else {
+        alert('Not enough money!');
+    }
+}
